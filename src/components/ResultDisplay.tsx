@@ -19,11 +19,11 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ shortCode }) => {
     // Given the setup (Frontend on Vercel, Backend on Railway), the "Result" 
     // needs to point to the BACKEND's redirect endpoint.
 
-    const apiBase = import.meta.env.VITE_API_BASE_URL;
+    const rawApiBaseUrl = import.meta.env.VITE_API_BASE_URL;
     // The API base should be an absolute URL (with protocol).
     // Redirect is assumed at `API_BASE_URL/{code}`.
 
-    if (!apiBase) {
+    if (!rawApiBaseUrl) {
         return (
             <div className="w-full max-w-lg mt-8">
                 <div className="comic-box p-6 bg-[var(--color-nude-dark)] text-center">
@@ -35,7 +35,13 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ shortCode }) => {
         );
     }
 
-    const shortUrl = `${apiBase}/${shortCode}`;
+    const apiBase = rawApiBaseUrl.startsWith('http://') || rawApiBaseUrl.startsWith('https://')
+        ? rawApiBaseUrl
+        : `https://${rawApiBaseUrl}`;
+
+    const apiBaseClean = apiBase.replace(/\/$/, '');
+
+    const shortUrl = `${apiBaseClean}/${shortCode}`;
 
     const handleCopy = async () => {
         try {
