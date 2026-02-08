@@ -1,73 +1,69 @@
-# React + TypeScript + Vite
+# ZIP IT! Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ZIP IT! is a comic-styled URL shortener frontend built with React, TypeScript, and Vite. It lets users paste a long URL, calls the backend `/shorten` endpoint, and displays a short link with a one-click copy button.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Shorten long URLs through a simple form.
+- Auto-prepends `https://` if the protocol is missing.
+- Displays the short URL and lets users copy it to the clipboard.
+- Friendly error states for invalid URLs or failed requests.
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React + TypeScript
+- Vite
+- Tailwind CSS (custom comic-style theme)
+- lucide-react icons
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Install dependencies:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Create a local environment file:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cp .env.example .env
 ```
+
+Set the backend API base URL (must include `/api`):
+
+```
+VITE_API_BASE_URL=http://localhost:8080/api
+```
+
+Run the dev server:
+
+```bash
+npm run dev
+```
+
+Open the app at http://localhost:5173.
+
+## API Contract
+
+The frontend expects a backend endpoint:
+
+- `POST /api/shorten` with JSON body `{ "long_url": "https://example.com" }`
+- Response JSON `{ "short_code": "abc123" }`
+
+The app constructs the final short URL as:
+
+$$
+	ext{shortUrl} = \text{VITE_API_BASE_URL} + "/" + \text{short\_code}
+$$
+
+## Scripts
+
+- `npm run dev` — start dev server
+- `npm run build` — production build
+- `npm run preview` — preview production build
+
+## Notes
+
+- If the backend is hosted elsewhere, update `VITE_API_BASE_URL` accordingly.
+- The short link opens in a new tab and can be copied to the clipboard.
