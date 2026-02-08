@@ -30,10 +30,10 @@ Create a local environment file:
 cp .env.example .env
 ```
 
-Set the backend API base URL (must include `/api`):
+Set the backend API base URL (absolute URL with protocol):
 
 ```
-VITE_API_BASE_URL=http://localhost:8080/api
+VITE_API_BASE_URL=https://your-backend-domain.example
 ```
 
 Run the dev server:
@@ -48,7 +48,7 @@ Open the app at http://localhost:5173.
 
 The frontend expects a backend endpoint:
 
-- `POST /api/shorten` with JSON body `{ "long_url": "https://example.com" }`
+- `POST /shorten` with JSON body `{ "long_url": "https://example.com" }`
 - Response JSON `{ "short_code": "abc123" }`
 
 The app constructs the final short URL as:

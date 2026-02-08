@@ -19,10 +19,21 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ shortCode }) => {
     // Given the setup (Frontend on Vercel, Backend on Railway), the "Result" 
     // needs to point to the BACKEND's redirect endpoint.
 
-    const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
-    // If apiBase is .../api, we might want to strip /api if the redirect is at root
-    // But checking backend router: `r.Route("/api", func(r chi.Router) { r.Get("/{code}", h.ResolveURL) })`
-    // So the redirect is at `API_BASE_URL/api/{code}`.
+    const apiBase = import.meta.env.VITE_API_BASE_URL;
+    // The API base should be an absolute URL (with protocol).
+    // Redirect is assumed at `API_BASE_URL/{code}`.
+
+    if (!apiBase) {
+        return (
+            <div className="w-full max-w-lg mt-8">
+                <div className="comic-box p-6 bg-[var(--color-nude-dark)] text-center">
+                    <p className="font-body text-sm text-[var(--color-maroon)]">
+                        Missing VITE_API_BASE_URL configuration.
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     const shortUrl = `${apiBase}/${shortCode}`;
 
